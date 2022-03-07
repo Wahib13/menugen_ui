@@ -1,0 +1,11 @@
+.page {
+    margin: 10px;
+}
+
+.page_content {
+    padding: 50px;
+    width: 250px;
+    border: 1px solid #eaeaea;
+    border-radius: 10px;
+    background-color: white;
+}
