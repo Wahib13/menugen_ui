@@ -12,6 +12,7 @@ const PageComponent = (
         prev_page_name,
         new_blank,
         level = -1,
+        ussd_app_id,
         deletePage,
         handleNewPage
     }:
@@ -29,6 +30,7 @@ const PageComponent = (
                     prev_page_name: prev_page_name,
                     name: make_random_name(),
                     context: current_content,
+                    ussd_app_id,
                 })
                 setCurrentContent('')
             }
@@ -36,6 +38,7 @@ const PageComponent = (
                 updateMutation.mutate({ page_id: id, context: current_content })
                 setIsEditing(false)
             }
+            event.preventDefault()
         }
     }
 
@@ -48,7 +51,7 @@ const PageComponent = (
         </div> :
         <p onClick={() => setIsEditing(true)}><span>&nbsp;&nbsp;</span>{current_content}</p>
 
-    
+
 
     return (
         <div className={styles.page}>

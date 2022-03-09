@@ -7,11 +7,15 @@ import styles from './Menu.module.css'
 import { QueryClient } from 'react-query';
 import Button from "react-bootstrap/Button"
 
-
-const app_id = "1"
-
 const Menu = (
-    { queryClient }: { queryClient: QueryClient }
+    {
+        queryClient,
+        app_id
+    }:
+        {
+            queryClient: QueryClient,
+            app_id: string
+        }
 ) => {
 
     const [pages, setPages] = useState<Page[]>([])
@@ -40,7 +44,8 @@ const Menu = (
             prev_page_name: prev_page_name,
             name: name,
             context: context,
-            type: 'END'
+            type: 'END',
+            ussd_app_id: app_id
         })
     }
     const deletePage = (id: string) => {
@@ -49,15 +54,16 @@ const Menu = (
 
     const new_blank_page = (pages.length > 0) ?
         <PageComponent
-            key='blank_page'
+            key={`${app_id}_blank_page`}
             new_blank={true}
             handleNewPage={handleNewPage}
             prev_page_name={pages[pages.length - 1].name}
+            ussd_app_id={app_id}
         /> : <></>
 
     // only show delete button on last page and never on the first single page
     const delete_button = (pages.length > 0 && pages.length > 1) ?
-        <Button key="delete_button" variant="danger" onClick={() => deletePage(pages[pages.length - 1].id || '')}>x</Button> :
+        <Button key={`${app_id}_delete_button`} variant="danger" onClick={() => deletePage(pages[pages.length - 1].id || '')}>x</Button> :
         <></>
 
     return (
@@ -65,7 +71,7 @@ const Menu = (
             {pages.map((page: any, idx: number) => {
                 return <div>
                     <PageComponent
-                        key={page.id}
+                        key={`${app_id}_${page.id}`}
                         id={page.id}
                         context={page.context}
                         options={page.options}
@@ -74,6 +80,7 @@ const Menu = (
                         name={page.name}
                         new_blank={false}
                         deletePage={deletePage}
+                        ussd_app_id={app_id}
                     />
                 </div>
             })}

@@ -2,7 +2,6 @@ import axios from "axios"
 import { useQuery } from "react-query"
 import { Page } from "../entities/page"
 
-const app_id = "1"
 const PAGES_ENDPOINT = process.env.NEXT_PUBLIC_PAGES_ENDPOINT || ''
 
 
@@ -12,7 +11,7 @@ export const useCreatePage = (page: Page) => {
         context: page.context,
         type: page.type,
         name: page.name,
-        ussd_app_id: app_id
+        ussd_app_id: page.ussd_app_id
     },
         {
             headers: {
