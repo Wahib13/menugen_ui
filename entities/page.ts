@@ -2,6 +2,7 @@ export type USSDApp = {
     id?: string
     name?: string
     shortcode: string
+    selected: boolean
 }
 
 export type Page = {
@@ -15,8 +16,6 @@ export type Page = {
     type?: 'END' | 'CONTINUE'
     new_blank?: boolean
     ussd_app_id: string
-    deletePage?: ((id: string) => void)
-    handleNewPage?: (page: Page) => void
 }
 
 export type Option = {

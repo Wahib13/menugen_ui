@@ -3,33 +3,44 @@ import { QueryClient } from 'react-query'
 import { useGetApps } from '../../adapters/app_adapter'
 import { USSDApp } from '../../entities/page'
 import styles from './Sidebar.module.css'
-import Button from 'react-bootstrap/Button'
+import { SidebarButton } from './SidebarButton/SidebarButtonComponent'
 
 export const Sidebar = (
     {
-        queryClient,
-        setActiveApp
+        apps,
+        setActiveApp,
+        createNewApp,
     }:
         {
-            queryClient: QueryClient,
-            setActiveApp: Dispatch<SetStateAction<string>>
+            apps: USSDApp[],
+            setActiveApp: (ussd_app_id: string) => void
+            createNewApp: (new_app_shortcode: string) => void
         }
 ) => {
 
-    const [apps, setApps] = useState<USSDApp[]>([])
-    const { isLoading, error, data } = useGetApps(setApps)
+    const [new_app_shortcode, setNewAppShortcode] = useState<string>('')
+
 
     return (
         <div className={styles.sidebar}>
             <h2>Shortcodes</h2>
             <ul>
                 {apps.map((ussd_app) => {
-                    return <li onClick={() => setActiveApp(ussd_app.id || '')} key={ussd_app.id}>
-                        <button>
-                            {ussd_app.shortcode}
-                        </button>
-                    </li>
+                    return <SidebarButton
+                        selected={ussd_app.selected}
+                        setActiveAppAction={setActiveApp}
+                        ussd_app={ussd_app}
+                    />
                 })}
+                <li>
+                    <form onSubmit={(e) => {
+                        e.preventDefault()
+                        createNewApp(new_app_shortcode)
+                        setNewAppShortcode('')
+                    }}>
+                        <input value={new_app_shortcode} onChange={(e) => setNewAppShortcode(e.target.value)} />
+                    </form>
+                </li>
             </ul>
         </div>
     )

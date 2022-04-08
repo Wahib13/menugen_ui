@@ -1,24 +1,9 @@
 import axios from "axios"
 import { useQuery } from "react-query"
-import { Page } from "../entities/page"
+import { Option, Page } from "../entities/page"
 
 const PAGES_ENDPOINT = process.env.NEXT_PUBLIC_PAGES_ENDPOINT || ''
 
-
-export const useCreatePage = (page: Page) => {
-    return axios.post(PAGES_ENDPOINT, {
-        prev_page_name: page.prev_page_name,
-        context: page.context,
-        type: page.type,
-        name: page.name,
-        ussd_app_id: page.ussd_app_id
-    },
-        {
-            headers: {
-                Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`
-            }
-        }).then(res => res.data)
-}
 
 export const useGetPages = (app_id: string, setPages: (data: any) => void) => {
     return useQuery(['pages', app_id], () => {
@@ -36,9 +21,25 @@ export const useGetPages = (app_id: string, setPages: (data: any) => void) => {
     })
 }
 
-export const useUpdatePage = ({ page_id, context }: { page_id: string, context: string }) => {
-    return axios.put(PAGES_ENDPOINT + `/${page_id}/`, {
-        context: context
+export const useUpdatePage = (
+    {
+        ussd_app_id,
+        page_name,
+        next_page_name,
+        context,
+        options,
+    }: {
+        ussd_app_id: string,
+        page_name: string,
+        next_page_name: string,
+        context: string,
+        options: Option[]
+    }
+) => {
+    return axios.put(PAGES_ENDPOINT + `/${ussd_app_id}/${page_name}/`, {
+        next_page_name: next_page_name,
+        context: context,
+        options: options
     }, {
         headers: {
             Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`
@@ -46,8 +47,16 @@ export const useUpdatePage = ({ page_id, context }: { page_id: string, context: 
     }).then(res => res.data)
 }
 
-export const useDeletePage = (page_name: string) => {
-    return axios.delete(PAGES_ENDPOINT + `/${page_name}/`, {
+export const useDeletePage = (
+    {
+        app_id,
+        page_name
+    }:
+    {
+        app_id: string,
+        page_name: string
+    }) => {
+    return axios.delete(PAGES_ENDPOINT + `/${app_id}/${page_name}/`, {
         headers: {
             Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_KEY}`
         }

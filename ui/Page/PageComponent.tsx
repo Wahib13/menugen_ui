@@ -9,12 +9,11 @@ const PageComponent = (
         id = "",
         context = "",
         options = [],
-        prev_page_name,
         new_blank,
+        name,
+        next_page_name,
         level = -1,
         ussd_app_id,
-        deletePage,
-        handleNewPage
     }:
         Page
 ) => {
@@ -25,19 +24,14 @@ const PageComponent = (
 
     const handleSubmitContent = (event: any) => {
         if (is_editing) {
-            if (new_blank && handleNewPage) {
-                handleNewPage({
-                    prev_page_name: prev_page_name,
-                    name: make_random_name(),
-                    context: current_content,
-                    ussd_app_id,
-                })
-                setCurrentContent('')
-            }
-            else {
-                updateMutation.mutate({ page_id: id, context: current_content })
-                setIsEditing(false)
-            }
+            updateMutation.mutate({
+                ussd_app_id: ussd_app_id,
+                next_page_name: next_page_name || '',
+                page_name: name || '',
+                context: current_content,
+                options: options
+            })
+            setIsEditing(false)
             event.preventDefault()
         }
     }
@@ -65,20 +59,6 @@ const PageComponent = (
             </div>
         </div>
     )
-}
-
-
-
-function make_random_name() {
-    const length = 5;
-    var result = '';
-    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var charactersLength = characters.length;
-    for (var i = 0; i < length; i++) {
-        result += characters.charAt(Math.floor(Math.random() *
-            charactersLength));
-    }
-    return result;
 }
 
 export { PageComponent }
