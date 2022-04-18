@@ -1,61 +1,69 @@
 import { useState } from "react"
-import { useMutation } from "react-query"
-import { useDeletePage, useUpdatePage } from "../../adapters/page_adapter"
-import { Option, Page } from "../../entities/page"
+import { Page } from "../../entities/page"
 import styles from './Page.module.css'
 
 const PageComponent = (
     {
-        id = "",
+        id,
+        level,
         context = "",
-        options = [],
-        new_blank,
-        name,
-        next_page_name,
-        level = -1,
-        ussd_app_id,
+        page,
+        start_editable,
+        optionComponents,
+        deleteComponent,
+        setPageContext,
+        handleSubmitPageUpdate,
+        addOption,
     }:
-        Page
-) => {
-    const [is_editing, setIsEditing] = useState(new_blank)
-    const [current_content, setCurrentContent] = useState(context)
-
-    const updateMutation = useMutation(useUpdatePage)
-
-    const handleSubmitContent = (event: any) => {
-        if (is_editing) {
-            updateMutation.mutate({
-                ussd_app_id: ussd_app_id,
-                next_page_name: next_page_name || '',
-                page_name: name || '',
-                context: current_content,
-                options: options
-            })
-            setIsEditing(false)
-            event.preventDefault()
+        {
+            id: string,
+            level: number,
+            context: string,
+            page: Page,
+            start_editable: boolean,
+            deleteComponent?: any,
+            optionComponents: React.ReactNode[],
+            setPageContext: (page_id: string, level: number, context: string) => void,
+            handleSubmitPageUpdate: (
+                page: Page,
+                event: any,
+                context: string,
+                setIsEditing: (editing: boolean) => void
+            ) => void
+            addOption: (
+                page: Page,
+                event: any
+            ) => void,
         }
-    }
+) => {
+    const [is_editing, setIsEditing] = useState(start_editable)
 
     const body = (is_editing) ?
         <div>
-            <form onSubmit={handleSubmitContent}>
-                <input type="text" value={current_content}
-                    onChange={(e) => setCurrentContent(e.target.value)} />
+            <form onSubmit={(event) => {
+                event.preventDefault()
+                setIsEditing(false)
+                return handleSubmitPageUpdate(page, event, context, setIsEditing)
+            }}>
+                <input type="text" value={context}
+                    onChange={(e) => setPageContext(id, level, e.target.value)} />
             </form>
         </div> :
-        <p onClick={() => setIsEditing(true)}><span>&nbsp;&nbsp;</span>{current_content}</p>
+        <p onClick={() => setIsEditing(true)}><span>&nbsp;&nbsp;</span>{context}</p>
 
 
 
     return (
         <div className={styles.page}>
+            {deleteComponent}
             <div className={styles.page_content}>
                 {body}
                 <ul>
-                    {options.map((option, idx) => {
-                        return <li key={id + idx}>{option.content}</li>
-                    })}
+                    {optionComponents}
                 </ul>
+                <button onClick={(event) => {
+                    return addOption(page, event)
+                }}>+</button>
             </div>
         </div>
     )
