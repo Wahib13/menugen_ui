@@ -8,7 +8,9 @@ console.log(APPS_ENDPOINT)
 export const useGetApps = (
     setApps: (data: any[]) => void,
     updateActiveApp: (ussd_app_id: string) => void,
-    current_active_app_id: string
+    updateActiveAppShortcode: (ussd_app_id: string) => void,
+    current_active_app_id: string,
+    current_active_app_shortcode: string
 ) => {
     return useQuery(['apps'], () => {
         return axios.get(APPS_ENDPOINT, {
@@ -24,8 +26,11 @@ export const useGetApps = (
             if (data.length > 0) {
 
                 const defaultActiveApp = data[0].id || ''
+                const defaultActiveAppShortcode = data[0].shortcode || ''
                 const new_active_app = current_active_app_id != '' ? current_active_app_id : defaultActiveApp
+                const new_active_app_shortcode = current_active_app_shortcode != '' ? current_active_app_shortcode : defaultActiveAppShortcode
                 updateActiveApp(new_active_app)
+                updateActiveAppShortcode(new_active_app_shortcode)
 
                 setApps(data.map(
                     (app: any) => {

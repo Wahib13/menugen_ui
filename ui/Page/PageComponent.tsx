@@ -26,9 +26,7 @@ const PageComponent = (
             setPageContext: (page_id: string, level: number, context: string) => void,
             handleSubmitPageUpdate: (
                 page: Page,
-                event: any,
                 context: string,
-                setIsEditing: (editing: boolean) => void
             ) => void
             addOption: (
                 page: Page,
@@ -39,17 +37,16 @@ const PageComponent = (
     const [is_editing, setIsEditing] = useState(start_editable)
 
     const body = (is_editing) ?
-        <div>
-            <form onSubmit={(event) => {
-                event.preventDefault()
-                setIsEditing(false)
-                return handleSubmitPageUpdate(page, event, context, setIsEditing)
-            }}>
-                <input type="text" value={context}
-                    onChange={(e) => setPageContext(id, level, e.target.value)} />
-            </form>
-        </div> :
-        <p onClick={() => setIsEditing(true)}><span>&nbsp;&nbsp;</span>{context}</p>
+        <form onSubmit={(event) => {
+            event.preventDefault()
+            setIsEditing(false)
+            return handleSubmitPageUpdate(page, context)
+        }}>
+            <input type="text" value={context}
+                onChange={(e) => setPageContext(id, level, e.target.value)} />
+        </form>
+        :
+        <p className={styles.page_context} onClick={() => setIsEditing(true)}><span>&nbsp;&nbsp;</span>{context}</p>
 
 
 
@@ -57,7 +54,9 @@ const PageComponent = (
         <div className={styles.page}>
             {deleteComponent}
             <div className={styles.page_content}>
-                {body}
+                <div className={styles.page_context}>
+                    {body}
+                </div>
                 <ul>
                     {optionComponents}
                 </ul>

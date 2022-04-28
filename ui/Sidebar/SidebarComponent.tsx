@@ -13,7 +13,7 @@ export const Sidebar = (
     }:
         {
             apps: USSDApp[],
-            setActiveApp: (ussd_app_id: string) => void
+            setActiveApp: (ussd_app_id: string, ussd_app_shortcode: string) => void
             createNewApp: (new_app_shortcode: string) => void
         }
 ) => {

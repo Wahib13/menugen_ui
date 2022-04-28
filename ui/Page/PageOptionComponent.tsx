@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Page, Option } from "../../entities/page"
+import styles from "./Page.module.css"
 
 const PageOptionComponent = (
     {
@@ -42,7 +43,7 @@ const PageOptionComponent = (
                 setEditing(false)
                 return handleSubmitPageUpdate(page, page.context || '')
             }}>
-                <li>
+                <li className={styles.page_option}>
                     {index + 1}. {list_item}
                 </li>
             </form>

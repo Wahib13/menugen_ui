@@ -1,0 +1,123 @@
+.menu_tester_container_outer {
+    overflow: hidden;
+    position: fixed;
+    right: 0;
+    width: 400px;
+    height: 400px;
+}
+
+.dial_form {
+    background-color: #eaeaea;
+    z-index: 0;
+    position: absolute;
+    width: 350px;
+    height: 400px;
+    padding: 30px;
+}
+
+.backspace_button {
+
+}
+
+.button_container {
+    margin-left: 50px;
+}
+
+@keyframes slide-left {
+    from {right: -257px}
+    to {right: 94px}
+}
+
+@keyframes slide-right {
+    from {right: 0px}
+    to {right: -257px}
+}
+
+.menu_tester_toggle_btn {
+    display: inline-block;
+    background-color: #57b6ff;
+    color: white;
+    border-radius: 20%;
+    border: none;
+    padding: 10px;
+    margin-top: 200px;
+    /* position: absolute; */
+}
+
+.dial_form_container {
+    position: absolute;
+    width: 300px;
+    height: 400px;
+    display: inline-block;
+}
+
+.menu_tester_container {
+    position: absolute;
+    width: 300px;
+    height: 400px;
+    right: -257px;
+}
+
+.menu_tester_container_revealed {
+    animation: slide-left 0.5s;
+    animation-fill-mode: forwards;
+}
+
+.menu_tester_container_hidden {
+    animation-name: slide-right;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+}
+
+.dialler_error {
+    color: red;
+}
+
+.call-button {
+    background-color: green;
+    border-radius: 50%;
+    border: none;
+    margin-left: 78px;
+    margin-right: 1px;
+}
+
+.call-button .call-icon {
+    color: white;
+    padding: 8px;
+}
+
+.dial-button {
+    padding: 10px 12px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+.page_display {
+    background-color: white;
+    border: black;
+    padding: 50px;
+    width: 200px;
+    border: 1px solid #eaeaea;
+    border-radius: 10px;
+    position: absolute;
+}
+
+.page_display_plus_bg_container {
+    position: absolute;
+    z-index: 1;
+}
+
+.page_display_container {
+    height: 400px;
+    width: 300px;
+    padding: 30px;
+}
+
+.page_display_bg {
+    background-color: black;
+    opacity: 20%;
+    width: 350px;
+    height: 400px;
+    position: absolute;
+}
+

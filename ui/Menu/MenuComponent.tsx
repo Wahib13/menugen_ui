@@ -12,11 +12,13 @@ import { DeleteButton } from "../Page/DeleteButtonComponent"
 const Menu = (
     {
         queryClient,
-        app_id
+        app_id,
+        shortcode
     }:
         {
             queryClient: QueryClient,
-            app_id: string
+            app_id: string,
+            shortcode: string
         }
 ) => {
 
