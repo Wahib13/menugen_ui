@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import parse from 'html-react-parser'
 import styles from './MenuTester.module.css'
 
-const ENDPOINT_PULL_USSD = "http://localhost:8000/menu_gen/pull/"
+const ENDPOINT_PULL_USSD = process.env.NEXT_PUBLIC_USSD_PULL_ENDPOINT || ''
 
 type USSD_Output = {
     message: string
