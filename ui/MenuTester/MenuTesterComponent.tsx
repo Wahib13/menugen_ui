@@ -211,7 +211,10 @@ const USSD_PageDisplayPrompt = (
                             <button onClick={(e) => {
                                 e.preventDefault()
                                 pullUSSD(inputMessage, "233202009098", "2", (output: USSD_Output) => {
-                                    setOutputMessage(output)
+                                    setOutputMessage({
+                                            message: convertUSSDReplyToHTML(output.message),
+                                            type: output.type
+                                        })
                                     setInputMessage("")
                                 })
                             }}>Send</button> : <></>}
