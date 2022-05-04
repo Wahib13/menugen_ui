@@ -106,7 +106,6 @@ const MenuTesterComponent = (
                                 <DialButton content={'0'} appendDiallerContent={appendDiallerContent} />
                                 <DialButton content={'#'} appendDiallerContent={appendDiallerContent} />
                             </div>
-                            <br />
                             <button className={styles["call-button"]} disabled={promptDisplaying} type="submit">
                                 <i className={`material-icons ${styles["call-icon"]}`}>call</i>
                             </button>

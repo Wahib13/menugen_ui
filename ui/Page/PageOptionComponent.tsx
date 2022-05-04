@@ -2,6 +2,9 @@ import { useState } from "react"
 import { Page, Option } from "../../entities/page"
 import styles from "./Page.module.css"
 
+
+const LIST_COLORS = ["#ffe8e8", "#e0e4ff", "#e3ffe0", "#feffe0"]
+
 const PageOptionComponent = (
     {
         index,
@@ -43,12 +46,15 @@ const PageOptionComponent = (
                 setEditing(false)
                 return handleSubmitPageUpdate(page, page.context || '')
             }}>
-                <li className={styles.page_option}>
+                <li className={styles.page_option}
+                    style={{ backgroundColor: LIST_COLORS[index] }}>
                     {index + 1}. {list_item}
                 </li>
             </form>
-        </div>
+        </div >
     )
 }
+
+
 
 export { PageOptionComponent }

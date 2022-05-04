@@ -11,7 +11,7 @@
     flex-direction: row;
     margin-left: 200px;
     position: absolute;
-    transform: translateY(+75%);
+    transform: translateY(+300px);
     align-items: center;
 }
 

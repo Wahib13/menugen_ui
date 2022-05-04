@@ -10,7 +10,7 @@ const Home: NextPage = () => {
   return (
     <div className={styles.wrapper}>
       <Head>
-        <title>Test</title>
+        <title>Menu Generator</title>
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
       </Head>
       <QueryClientProvider client={queryClient}>

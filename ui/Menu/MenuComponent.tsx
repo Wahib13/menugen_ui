@@ -199,6 +199,8 @@ const Menu = (
                                     return <PageComponent
                                         key={`${app_id}_${page.id}`}
                                         id={page.id || ''}
+                                        vertical_position={idx}
+                                        vertical_group_count={page_vertical_group.length}
                                         level={page.level || 1}
                                         context={page.context || ''}
                                         page={page}
