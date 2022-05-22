@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction, useState } from 'react'
 import { QueryClient } from 'react-query'
 import { useGetApps } from '../../adapters/app_adapter'
 import { USSDApp } from '../../entities/page'
+import DataResetTimer from '../DataResetTimer/DataResetTimer'
 import styles from './Sidebar.module.css'
 import { SidebarButton } from './SidebarButton/SidebarButtonComponent'
 
@@ -42,6 +43,7 @@ export const Sidebar = (
                     </form>
                 </li>
             </ul>
+            <DataResetTimer />
         </div>
     )
 }

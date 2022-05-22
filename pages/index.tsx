@@ -2,6 +2,7 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import styles from '../styles/Home.module.css'
+import DataResetTimer from '../ui/DataResetTimer/DataResetTimer'
 import { MenuEditor } from '../ui/MenuEditor/MenuEditorComponent'
 
 const queryClient = new QueryClient()

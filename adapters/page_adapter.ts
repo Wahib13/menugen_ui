@@ -18,7 +18,8 @@ export const useGetPages = (app_id: string, setPages: (data: any) => void) => {
             })
     }, {
         onSuccess: (data) => {
-            setPages(groupPages(data))
+            const grouped_pages = groupPages(data)
+            setPages(grouped_pages)
         }
     })
 }
@@ -31,7 +32,6 @@ const groupPages = (raw_page_data: any[]) => {
         }
         grouped_pages[raw_page.level - 1].push(raw_page)
     })
-    console.log(grouped_pages)
     return grouped_pages
 }
 

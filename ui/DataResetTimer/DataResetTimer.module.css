@@ -1,0 +1,9 @@
+.demo_text {
+    color: white;
+    text-align: center;
+    padding: 10px;
+}
+
+.demo_text b {
+    font-weight: bold;
+}
