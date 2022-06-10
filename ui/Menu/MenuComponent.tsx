@@ -9,6 +9,7 @@ import { QueryClient } from 'react-query';
 import make_random_name from "../../utils"
 import { PageOptionComponent } from "../Page/PageOptionComponent"
 import { DeleteButton } from "../Page/DeleteButtonComponent"
+import PageLoader from "next/dist/client/page-loader"
 
 const Menu = (
     {
@@ -218,6 +219,16 @@ const Menu = (
                 if (childNode) {
                     page_leaf.children.push(childNode)
                 }
+            }
+        }
+        if (page.next_page_name) {
+            const child_page = pages.filter((page_) => page_.name === page.next_page_name)[0]
+            if (!child_page) {
+                return page_leaf
+            }
+            const childNode = createPageComponent(pages, child_page)
+            if (childNode) {
+                page_leaf.children.push(childNode)
             }
         }
         return page_leaf
