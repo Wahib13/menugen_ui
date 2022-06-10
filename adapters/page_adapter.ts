@@ -18,8 +18,8 @@ export const useGetPages = (app_id: string, setPages: (data: any) => void) => {
             })
     }, {
         onSuccess: (data) => {
-            const grouped_pages = groupPages(data)
-            setPages(grouped_pages)
+            // const grouped_pages = groupPages(data)
+            setPages(data)
         }
     })
 }

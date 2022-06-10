@@ -2,8 +2,9 @@
     margin: 10px;
 }
 
+
 .page_content {
-    padding: 50px;
+    padding: 10px;
     width: 250px;
     border: 1px solid #eaeaea;
     border-radius: 10px;
@@ -12,6 +13,9 @@
 
 .page_context {
     margin-bottom: 10px;
+    width: 250px;
+    word-wrap: break-word;
+    white-space: normal;
 }
 
 .page_option {

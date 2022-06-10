@@ -1,3 +1,4 @@
+import Tree from "rc-tree"
 import { useState } from "react"
 import { useMutation } from "react-query"
 import { useDeletePage, useGetPages, useUpdatePage } from "../../adapters/page_adapter"
@@ -22,8 +23,8 @@ const Menu = (
         }
 ) => {
 
-    const [grouped_pages, setGroupedPages] = useState<Page[][]>([[]])
-    const { isLoading, error, data } = useGetPages(app_id, setGroupedPages)
+    const [pages, setPages] = useState<Page[]>([])
+    const { isLoading, error, data } = useGetPages(app_id, setPages)
 
     const updatePageMutation = useMutation(useUpdatePage, {
         onSuccess: (data, variables, context) => {
@@ -35,16 +36,18 @@ const Menu = (
         page_id: string,
         level: number,
         page_context: string) => {
-        const page_groups = grouped_pages.slice()
-        page_groups[level - 1] = page_groups[level - 1].map(
+        const pages_new = pages.map(
             (page) => {
                 if (page.id == page_id) {
-                    return { ...page, context: page_context }
+                    return {
+                        ...page,
+                        context: page_context
+                    }
                 }
                 return page
             }
         )
-        setGroupedPages(page_groups)
+        setPages(pages_new)
     }
 
     const addOption = (page: Page, event: any) => {
@@ -70,27 +73,27 @@ const Menu = (
         content: string,
         page: Page
     ) => {
-        const page_level = page.level || 1
         const page_id = page.id || ''
-
-        const page_groups = grouped_pages.slice()
-        page_groups[page_level - 1] = page_groups[page_level - 1].map(
-            (page) => {
-                if (page.id == page_id) {
+        const new_page = {
+            ...page,
+            options: page.options.map((option, index) => {
+                if (index == option_index) {
                     return {
-                        ...page,
-                        options: page.options.map((option, index) => {
-                            if (index == option_index) {
-                                return { ...option, content: content }
-                            }
-                            return option
-                        })
+                        ...option,
+                        content: content
                     }
                 }
-                return page
+                return option
+            })
+        }
+
+        const new_pages = pages.map((page) => {
+            if (page.id == page_id) {
+                return new_page
             }
-        )
-        setGroupedPages(page_groups)
+            return page
+        })
+        setPages(new_pages)
     }
 
 
@@ -143,16 +146,16 @@ const Menu = (
         })
     }
 
-    const new_page_button = (grouped_pages.length > 0) ?
+    const new_page_button = (pages.length > 0) ?
         <button key={`${app_id}_new_page_button`} onClick={() => {
-            const last_page_group = grouped_pages[grouped_pages.length - 1]
-            const last_page = last_page_group[last_page_group.length - 1]
-            return handleNewPage({
-                name: last_page.name || '',
-                context: last_page.context || '',
-                next_page_name: make_random_name(),
-                ussd_app_id: app_id
-            })
+            const last_page_group = pages[pages.length - 1]
+            // const last_page = last_page_group[last_page_group.length - 1]
+            // return handleNewPage({
+            //     name: last_page.name || '',
+            //     context: last_page.context || '',
+            //     next_page_name: make_random_name(),
+            //     ussd_app_id: app_id
+            // })
         }}>+</button> :
         <></>
 
@@ -176,50 +179,71 @@ const Menu = (
         }
     }
 
-    return (
-        <div className={styles.page_container_overflow}>
-            <div className={styles.page_container_horizontal}>
-                {grouped_pages.map((page_vertical_group: any[], idx1: number) => {
+    const createdPageIds: any = []
 
-                    return (
-                        <div className={styles.page_container_vertical}>
-                            {page_vertical_group.map(
-                                (page: Page, idx: number) => {
-                                    let delete_button = <></>
-                                    if (
-                                        grouped_pages.length > 1 &&
-                                        idx1 == grouped_pages.length - 1 &&
-                                        idx == page_vertical_group.length - 1
-                                    ) {
-                                        delete_button = <DeleteButton
-                                            page_name={page.name}
-                                            deletePage={deletePage}
-                                        />
-                                    }
-                                    return <PageComponent
-                                        key={`${app_id}_${page.id}`}
-                                        id={page.id || ''}
-                                        vertical_position={idx}
-                                        vertical_group_count={page_vertical_group.length}
-                                        level={page.level || 1}
-                                        context={page.context || ''}
-                                        page={page}
-                                        start_editable={false}
-                                        setPageContext={setPageContext}
-                                        optionComponents={convertOptionsToComponents(page.options, page)}
-                                        handleSubmitPageUpdate={handleSubmitPageUpdate}
-                                        addOption={addOption}
-                                        deleteComponent={delete_button}
-                                    />
-                                }
-                            )}
-                        </div>
-                    )
-                })}
-                {new_page_button}
+    const createPageComponent = (pages: Page[], page: Page) => {
+        if (createdPageIds.includes(page.id)) {
+            return null
+        }
+        let delete_button = <></>
+        let page_leaf: any = {
+            key: `node_${app_id}_${page.id}`,
+            title: <PageComponent
+                key={`${app_id}_${page.id}`}
+                id={page.id || ''}
+                level={page.level || 1}
+                context={page.context || ''}
+                page={page}
+                start_editable={false}
+                setPageContext={setPageContext}
+                optionComponents={convertOptionsToComponents(page.options, page)}
+                handleSubmitPageUpdate={handleSubmitPageUpdate}
+                addOption={addOption}
+                deleteComponent={delete_button}
+            />,
+            // title: page.context,
+            children: []
+        }
+
+        createdPageIds.push(page.id)
+
+        if (page.options.length > 0) {
+            for (let k = 0; k < page.options.length; k++) {
+                const child_page: Page | null = pages.filter((page_) => page_.name == page.options[k].next_page_name)[0]
+                if (!child_page) {
+                    continue;
+                }
+                // console.log(`content: ${child_page_via_options.context}, final_vertical_position: ${k + vertical_position}, k = ${k}, v = ${vertical_position}`)
+                const childNode = createPageComponent(pages, child_page)
+                if (childNode) {
+                    page_leaf.children.push(childNode)
+                }
+            }
+        }
+        return page_leaf
+    }
+
+    if (pages.length > 0) {
+        return (
+            <div className={styles.page_container_overflow}>
+                <Tree
+                    className="myCls"
+                    showLine
+                    checkable={false}
+                    selectable={false}
+                    showIcon={false}
+                    autoExpandParent={true}
+                    treeData={[createPageComponent(pages, pages[0])]}
+                />
+
             </div>
-        </div>
+        )
+    }
+
+    return (
+        <></>
     )
+
 }
 
 
