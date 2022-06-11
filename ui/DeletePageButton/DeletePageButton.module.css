@@ -3,7 +3,7 @@
     color: white;
     border-radius: 100%;
     border: none;
-    position: absolute;
+    position: relative;
     bottom: 90px;
     left: 273px
 }

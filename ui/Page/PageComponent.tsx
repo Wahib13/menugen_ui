@@ -15,7 +15,6 @@ const PageComponent = (
         page,
         start_editable,
         optionComponents,
-        deleteComponent,
         setPageContext,
         handleSubmitPageUpdate,
         addOption,
@@ -32,7 +31,6 @@ const PageComponent = (
             context?: string,
             page: Page,
             start_editable: boolean,
-            deleteComponent?: any,
             optionComponents: React.ReactNode[],
             setPageContext: (page_id: string, level: number, context: string) => void,
             handleSubmitPageUpdate: (
@@ -72,7 +70,6 @@ const PageComponent = (
 
     return (
         <div className={styles.page}>
-            {deleteComponent}
             <div className={styles.page_content}>
                 <div className={styles.page_context}>
                     {body}
@@ -83,6 +80,14 @@ const PageComponent = (
                 <button className={styles.add_option_button} onClick={(event) => {
                     return addOption(page, event)
                 }}>+</button>
+                {page.type === "END" && page.name != "intro" ?
+                    <DeletePageButton
+                        key={`delete_${page.id}`}
+                        page_name={page.name}
+                        handleDeletePage={handleDeletePage}
+                    />
+                    :
+                    <></>}
             </div>
             {page.type === "END" ?
                 <NewPageButton
@@ -92,14 +97,7 @@ const PageComponent = (
                 />
                 :
                 <></>}
-            {page.type === "END" && page.name != "intro" ?
-                <DeletePageButton
-                    key={`delete_${page.id}`}
-                    page_name={page.name}
-                    handleDeletePage={handleDeletePage}
-                />
-                :
-                <></>}
+
         </div>
     )
 }
