@@ -3,6 +3,7 @@
     color: white;
     border-radius: 100%;
     border: none;
-    position: fixed;
-    margin-left: 334px;
+    position: absolute;
+    bottom: 90px;
+    left: 273px
 }

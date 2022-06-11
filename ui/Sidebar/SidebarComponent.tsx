@@ -26,8 +26,9 @@ export const Sidebar = (
         <div className={styles.sidebar}>
             <h2>Shortcodes</h2>
             <ul>
-                {apps.map((ussd_app) => {
+                {apps.map((ussd_app, idx) => {
                     return <SidebarButton
+                        key={`side_bar_button_${idx}`}
                         selected={ussd_app.selected}
                         setActiveAppAction={setActiveApp}
                         ussd_app={ussd_app}
@@ -43,7 +44,9 @@ export const Sidebar = (
                     </form>
                 </li>
             </ul>
-            <DataResetTimer />
+            <DataResetTimer
+                key={"data_reset_timer"}
+            />
         </div>
     )
 }

@@ -8,7 +8,6 @@ import styles from './Menu.module.css'
 import { QueryClient } from 'react-query';
 import make_random_name from "../../utils"
 import { PageOptionComponent } from "../Page/PageOptionComponent"
-import { DeleteButton } from "../Page/DeleteButtonComponent"
 import PageLoader from "next/dist/client/page-loader"
 
 const Menu = (
@@ -121,44 +120,27 @@ const Menu = (
 
     const handleNewPage = (
         {
-            name,
-            context,
+            page,
             next_page_name,
-            ussd_app_id
         }: {
-            name: string,
-            context: string,
+            page: Page,
             next_page_name: string,
-            ussd_app_id: string,
         }) => {
         updatePageMutation.mutate({
-            ussd_app_id: ussd_app_id,
-            page_name: name,
+            ussd_app_id: page.ussd_app_id || '',
+            page_name: page.name,
             next_page_name: next_page_name,
-            context: context,
-            options: []
+            context: page.context || '',
+            options: page.options
         })
     }
 
-    const deletePage = (name: string) => {
+    const handleDeletePage = (name: string) => {
         deletePageMutation.mutate({
             app_id: app_id,
             page_name: name
         })
     }
-
-    const new_page_button = (pages.length > 0) ?
-        <button key={`${app_id}_new_page_button`} onClick={() => {
-            const last_page_group = pages[pages.length - 1]
-            // const last_page = last_page_group[last_page_group.length - 1]
-            // return handleNewPage({
-            //     name: last_page.name || '',
-            //     context: last_page.context || '',
-            //     next_page_name: make_random_name(),
-            //     ussd_app_id: app_id
-            // })
-        }}>+</button> :
-        <></>
 
     const convertOptionsToComponents = (
         options: Option[],
@@ -167,7 +149,7 @@ const Menu = (
         if (options) {
             return options.map((option, idx) => {
                 return <PageOptionComponent
-                    key={page.id || '' + idx}
+                    key={`${page.id || ''} + ${idx}`}
                     index={idx}
                     page={page}
                     content={option.content}
@@ -186,7 +168,6 @@ const Menu = (
         if (createdPageIds.includes(page.id)) {
             return null
         }
-        let delete_button = <></>
         let page_leaf: any = {
             key: `node_${app_id}_${page.id}`,
             title: <PageComponent
@@ -200,9 +181,9 @@ const Menu = (
                 optionComponents={convertOptionsToComponents(page.options, page)}
                 handleSubmitPageUpdate={handleSubmitPageUpdate}
                 addOption={addOption}
-                deleteComponent={delete_button}
+                handleNewPage={handleNewPage}
+                handleDeletePage={handleDeletePage}
             />,
-            // title: page.context,
             children: []
         }
 
@@ -239,11 +220,13 @@ const Menu = (
             <div className={styles.page_container_overflow}>
                 <Tree
                     className="myCls"
-                    showLine
+                    showLine={true}
                     checkable={false}
                     selectable={false}
                     showIcon={false}
-                    autoExpandParent={true}
+                    defaultExpandAll={true}
+                    // autoExpandParent={true}
+                    // defaultExpandParent={true}
                     treeData={[createPageComponent(pages, pages[0])]}
                 />
 
