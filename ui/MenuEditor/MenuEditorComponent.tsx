@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { useState } from 'react'
+import { Blocks } from 'react-loader-spinner'
 import { QueryClient, useMutation } from 'react-query'
 import { useCreateApp, useGetApps } from '../../adapters/app_adapter'
 import { USSDApp } from '../../entities/page'
@@ -56,6 +57,18 @@ export const MenuEditor = (
         /> :
         <></>
 
+    if (isLoading) {
+        return (
+            <Blocks
+            visible={true}
+            height="80"
+            width="80"
+            ariaLabel="blocks-loading"
+            wrapperStyle={{margin: "auto"}}
+            wrapperClass="blocks-wrapper"
+            />
+        )
+    }
     return (
         <>
             {menu_component}
