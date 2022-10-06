@@ -3,7 +3,7 @@
     position: fixed;
     right: 0;
     width: 400px;
-    height: 300px;
+    height: 350px;
 }
 
 .dial_form {
@@ -113,8 +113,9 @@
     background-color: green;
     border-radius: 50%;
     border: none;
-    margin-left: 78px;
+    margin-left: 84px;
     margin-right: 1px;
+    margin-top: 5px;
     height: 50px;
 }
 
@@ -135,8 +136,20 @@
     padding: 10px 12px;
     margin-right: 5px;
     margin-bottom: 5px;
+    border: none;
+    border-radius: 50%;
     width: 35px;
     height: 35px;
+    background-color: #57b6ff;
+    color: white;
+}
+
+.dial-button:hover {
+    background-color: #4ba1e2;
+}
+
+.dial-button:active {
+    background-color: #57b6ff;
 }
 
 .page_display {
