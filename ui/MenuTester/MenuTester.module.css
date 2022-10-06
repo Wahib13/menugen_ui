@@ -16,11 +16,16 @@
 }
 
 .backspace_button {
+    margin: 5px;
+}
 
+.phone_input {
+    margin-left: 30px;
 }
 
 .button_container {
     margin-left: 50px;
+    margin-top: 10px;
 }
 
 @keyframes slide-left {
@@ -33,6 +38,32 @@
     to {right: -257px}
 }
 
+@keyframes shake {
+    0% {
+      transform: translateX(0);
+    }
+  
+    20% {
+      transform: translateX(-10px);
+    }
+  
+    40% {
+      transform: translateX(10px);
+    }
+  
+    60% {
+      transform: translateX(-10px);
+    }
+  
+    80% {
+      transform: translateX(10px);
+    }
+  
+    100% {
+      transform: translateX(0);
+    }
+  }
+
 .menu_tester_toggle_btn {
     display: inline-block;
     background-color: #57b6ff;
@@ -40,8 +71,12 @@
     border-radius: 20%;
     border: none;
     padding: 10px;
-    margin-top: 200px;
+    margin-top: 114px;
     /* position: absolute; */
+}
+
+.menu_tester_toggle_btn:hover {
+    background-color: #4ba1e2;
 }
 
 .dial_form_container {
@@ -70,6 +105,7 @@
 }
 
 .dialler_error {
+    animation: shake .5s ease-in-out;
     color: red;
 }
 
@@ -79,6 +115,15 @@
     border: none;
     margin-left: 78px;
     margin-right: 1px;
+    height: 50px;
+}
+
+.call-button:hover {
+    background-color: rgb(2, 108, 2);
+}
+
+.call-button:active {
+    background-color: green;
 }
 
 .call-button .call-icon {
@@ -90,6 +135,8 @@
     padding: 10px 12px;
     margin-right: 5px;
     margin-bottom: 5px;
+    width: 35px;
+    height: 35px;
 }
 
 .page_display {
@@ -104,7 +151,7 @@
 
 .page_display_plus_bg_container {
     position: absolute;
-    z-index: 1;
+    /* z-index: 1; */
 }
 
 .page_display_container {
@@ -121,3 +168,28 @@
     position: absolute;
 }
 
+.ussd_prompt_input {
+    margin: 7px 0 7px 0;
+    outline: 0;
+    border-width: 0 0 2px;
+    padding-top: 15px;
+}
+
+.ussd_prompt_input:focus {
+    border-color: #57b6ff;
+}
+
+.ussd_prompt_button {
+    margin: 5px 0px 0px 9px;
+    border-width: thin;
+    padding: 12px;
+    border-radius: 15%;
+}
+
+.ussd_prompt_button:hover {
+    background-color: rgb(232, 230, 230);
+}
+
+.ussd_prompt_button_container {
+    display: inline;
+}

@@ -3,6 +3,7 @@ import xml2js from "xml2js"
 import { useEffect, useState } from "react"
 import parse from 'html-react-parser'
 import styles from './MenuTester.module.css'
+import { Oval } from "react-loader-spinner"
 
 const ENDPOINT_PULL_USSD = process.env.NEXT_PUBLIC_USSD_PULL_ENDPOINT || ''
 
@@ -26,6 +27,7 @@ const MenuTesterComponent = (
     const [errorMode, setErrorMode] = useState<boolean>(false)
     const [diallerContent, setDiallerContent] = useState<string | string[]>(shortcode)
     const [hidden, setHidden] = useState<boolean>(true)
+    const [is_dialling, setIsDialling] = useState<boolean>(false)
 
     useEffect(() => {
         setDiallerContent(shortcode)
@@ -33,7 +35,6 @@ const MenuTesterComponent = (
 
     const appendDiallerContent = (additional_content: string) => {
         setDiallerContent(diallerContent + additional_content)
-        setErrorMode(false)
     }
 
     const promptDisplay = promptDisplaying ?
@@ -43,7 +44,21 @@ const MenuTesterComponent = (
             setInputMessage={setInputMessage}
             setOutputMessage={setOutputMessage}
             setPromptDisplaying={setPromptDisplaying}
+            setIsDialling={setIsDialling}
         /> : <></>
+
+    const loadingSpinner = is_dialling ? <USSD_Dial_Spinner/> : <></>
+
+
+    const shakeAndRevert = () => {
+        setErrorMode(true)
+        setTimeout(
+            () => {
+                setErrorMode(false)
+            },
+            500
+        )
+    }
 
     return (
         <>
@@ -66,7 +81,7 @@ const MenuTesterComponent = (
                             onSubmit={(e) => {
                                 e.preventDefault()
                                 if (diallerContent == shortcode) {
-                                    pullUSSD(diallerContent, "233202009098", "1", (output: USSD_Output) => {
+                                    pullUSSD(diallerContent, "233202009098", "1", setIsDialling, (output: USSD_Output) => {
                                         setOutputMessage({
                                             message: convertUSSDReplyToHTML(output.message),
                                             type: output.type
@@ -76,10 +91,10 @@ const MenuTesterComponent = (
                                     })
                                 }
                                 else {
-                                    setErrorMode(true)
+                                    shakeAndRevert()
                                 }
                             }}>
-                            <input className={errorMode ? styles.dialler_error : styles.dialler_plain}
+                            <input className={`${styles.phone_input} ${errorMode ? styles.dialler_error : styles.dialler_plain}`}
                                 value={diallerContent}
                                 readOnly />
                             <button className={styles.backspace_button} onClick={(e) => {
@@ -111,6 +126,7 @@ const MenuTesterComponent = (
                             </button>
                         </form>
                         {promptDisplay}
+                        {loadingSpinner}
                     </div>
                 </div>
             </div>
@@ -118,6 +134,7 @@ const MenuTesterComponent = (
     )
 
 }
+
 
 const DialButton = ({
     content,
@@ -143,9 +160,11 @@ const pullUSSD = (
     input: string | string[],
     msisdn: string,
     input_type: string,
+    setIsDialling: (dialling: boolean) => void,
     next: (output: USSD_Output) => void
 ) => {
 
+    setIsDialling(true)
     const xml: string = `<ussd>
         <msisdn>${msisdn}</msisdn>
         <sessionid>${"0001"}</sessionid>
@@ -168,7 +187,8 @@ const pullUSSD = (
                         type: result.ussd.type[0]
                     }
                 )
-            })
+            }),
+            setIsDialling(false)
         })
 }
 
@@ -183,13 +203,15 @@ const USSD_PageDisplayPrompt = (
         setInputMessage,
         setOutputMessage,
         setPromptDisplaying,
+        setIsDialling,
     }:
         {
             inputMessage: string,
             outputMessage: USSD_Output,
             setInputMessage: (input: string) => void
             setOutputMessage: (output: USSD_Output) => void
-            setPromptDisplaying: (displaying: boolean) => void
+            setPromptDisplaying: (displaying: boolean) => void,
+            setIsDialling: (dialling: boolean) => void
         }
 ) => {
 
@@ -201,15 +223,24 @@ const USSD_PageDisplayPrompt = (
             <div className={styles.page_display_container}>
                 <div className={styles.page_display}>
                     <div key="menu_form">
-                        <p><span>&nbsp;&nbsp;</span>{parse(outputMessage.message)}</p>
-                        {is_continue_message ? <input value={inputMessage} onChange={(e) => setInputMessage(e.target.value)} /> : <></>}
-                        <br />
-                        <button onClick={(e) => setPromptDisplaying(false)}>{is_continue_message ? "cancel" : "ok"}</button>
+                        <p>{parse(outputMessage.message)}</p>
+                        <div className={styles.ussd_prompt_button_container}>
+                            {is_continue_message ? 
+                                <input className={styles.ussd_prompt_input}
+                                value={inputMessage}
+                                onChange={
+                                    (e) => setInputMessage(e.target.value)
+                                } /> : <></>}
+                            <button className={styles.ussd_prompt_button} 
+                                onClick={(e) => setPromptDisplaying(false)}>
+                                    {is_continue_message ? "Cancel" : "OK"}
+                            </button>
+                        </div>
 
                         {is_continue_message ?
-                            <button onClick={(e) => {
+                            <button className={styles.ussd_prompt_button} onClick={(e) => {
                                 e.preventDefault()
-                                pullUSSD(inputMessage, "233202009098", "2", (output: USSD_Output) => {
+                                pullUSSD(inputMessage, "233202009098", "2", setIsDialling, (output: USSD_Output) => {
                                     setOutputMessage({
                                             message: convertUSSDReplyToHTML(output.message),
                                             type: output.type
@@ -221,6 +252,22 @@ const USSD_PageDisplayPrompt = (
                 </div>
             </div>
         </div>
+    )
+}
+
+const USSD_Dial_Spinner = () => {
+    return (
+        <>
+        <div className={styles.page_display_bg}></div> 
+        <Oval
+            visible={true}
+            height="80"
+            width="80"
+            color="#ffffff"
+            wrapperStyle={{margin: "auto", position: "absolute", left: "50%",
+            top: "30%", transform: "translate(-50%,-50%)", }}
+            />
+        </>
     )
 }
 

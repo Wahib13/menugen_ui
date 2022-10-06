@@ -9,6 +9,7 @@ import { QueryClient } from 'react-query';
 import make_random_name from "../../utils"
 import { PageOptionComponent } from "../Page/PageOptionComponent"
 import PageLoader from "next/dist/client/page-loader"
+import { Oval } from "react-loader-spinner"
 
 const Menu = (
     {
@@ -31,6 +32,11 @@ const Menu = (
             queryClient.invalidateQueries()
         }
     })
+
+    const switcherIcon = (isOpen: boolean | undefined) => <div
+         className={`material-symbols-outlined ${styles.switcher_icon_button}`}>
+            {isOpen ? `expand_more` : `chevron_right`}
+    </div>
 
     const setPageContext = (
         page_id: string,
@@ -225,6 +231,9 @@ const Menu = (
                     selectable={false}
                     showIcon={false}
                     defaultExpandAll={true}
+                    switcherIcon={
+                        (obj) => switcherIcon(obj.expanded)
+                    }
                     // autoExpandParent={true}
                     // defaultExpandParent={true}
                     treeData={[createPageComponent(pages, pages[0])]}

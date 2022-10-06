@@ -6,3 +6,9 @@
     overflow: scroll;
     background-color: #dbdbdb;
 }
+
+.switcher_icon_button {
+    background-color: #57b6ff;
+    color: white;
+    border-radius: 25%;
+}

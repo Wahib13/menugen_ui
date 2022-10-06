@@ -3,7 +3,11 @@
     color: white;
     border-radius: 100%;
     border: none;
-    position: relative;
-    bottom: 90px;
-    left: 273px
+    position: absolute;
+    bottom: 93%;
+    right: -3%;
+}
+
+.delete_button:hover {
+    background-color: rgb(195, 3, 3);
 }

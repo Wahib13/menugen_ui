@@ -62,11 +62,12 @@ const PageComponent = (
             setIsEditing(false)
             return handleSubmitPageUpdate(page, context)
         }}>
-            <input type="text" value={context}
+            <textarea value={context}
                 onChange={(e) => setPageContext(id, level, e.target.value)} />
+                <button type="submit" className={`material-symbols-outlined`}>done</button>
         </form>
         :
-        <p className={styles.page_context} onClick={() => setIsEditing(true)}><span>&nbsp;&nbsp;</span>{context}</p>
+        <p className={styles.page_context} onClick={() => setIsEditing(true)}>{context || <span>&nbsp;&nbsp;</span>}</p>
 
     return (
         <div className={styles.page}>

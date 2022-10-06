@@ -13,7 +13,7 @@ const DeletePageButton = (
     return <button
         className={styles.delete_button}
         onClick={() => handleDeletePage(page_name)}>
-        x
+        -
     </button>
 }
 

@@ -44,9 +44,9 @@ export const Sidebar = (
                     </form>
                 </li>
             </ul>
-            <DataResetTimer
+            {/* <DataResetTimer
                 key={"data_reset_timer"}
-            />
+            /> */}
         </div>
     )
 }

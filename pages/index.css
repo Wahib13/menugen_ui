@@ -1,3 +1,14 @@
 .rc-tree .rc-tree-treenode .rc-tree-node-content-wrapper {
     display: inline;
 }
+
+.rc-tree .rc-tree-treenode {
+    margin: 10px
+}
+
+.rc-tree .rc-tree-treenode span.rc-tree-switcher,
+.rc-tree .rc-tree-treenode span.rc-tree-checkbox,
+.rc-tree .rc-tree-treenode span.rc-tree-iconEle {
+    background-image: none;
+    display: inline;
+}
